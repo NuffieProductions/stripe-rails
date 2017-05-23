@@ -2,7 +2,8 @@ require 'stripe/event'
 module Stripe
   module EventDispatch
     def dispatch_stripe_event(params)
-      retrieve_stripe_event(params) do |evt|
+      # To support Rails 5, converted action controller object to Hash by 'to_unsafe_h'
+      retrieve_stripe_event(params.to_unsafe_h) do |evt|
         target = evt.data.object
         ::Stripe::Callbacks.run_callbacks(evt, target)
       end
